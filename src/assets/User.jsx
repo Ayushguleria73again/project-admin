@@ -29,7 +29,7 @@ function User() {
   const submitSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/signup/user", {
+      const response = await fetch("https://backend-r4h5.onrender.com/signup/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -55,7 +55,7 @@ function User() {
   const submitLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/signup/login", {
+      const response = await fetch("https://backend-r4h5.onrender.com/signup/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

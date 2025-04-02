@@ -5,7 +5,7 @@ function Tabel() {
   const [state, setState] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/route/products")
+    fetch("https://backend-r4h5.onrender.com/route/products")
       .then(res => res.json())
       .then(json => setState(json.data))
       .catch((error) => console.log(error));
@@ -13,7 +13,7 @@ function Tabel() {
 
   const deleteUser = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8000/route/delete/${id}`, {
+      const res = await fetch(`https://backend-r4h5.onrender.com/route/delete/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -45,7 +45,7 @@ function Tabel() {
                 <tr key={_id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{title}</th>
                   <td className="px-6 py-4">
-                    <img src={`http://localhost:8000/${media}`} alt={media} className="w-[30px] h-[30px]" />
+                    <img src={`https://backend-r4h5.onrender.com/${media}`} alt={media} className="w-[30px] h-[30px]" />
                   </td>
                   <td className="px-6 py-4">{brand}</td>
                   <td className="px-6 py-4">{category}</td>

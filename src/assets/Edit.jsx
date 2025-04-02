@@ -14,7 +14,7 @@ function Edit() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/route/products/${id}`)
+    fetch(`https://backend-r4h5.onrender.com/route/products/${id}`)
       .then((res) => res.json())
       .then((json) => {
         if (json.data) {
@@ -58,7 +58,7 @@ function Edit() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/route/update/${id}`, {
+      const response = await fetch(`https://backend-r4h5.onrender.com/route/update/${id}`, {
         method: 'PATCH',
         body: updatedData,
       });
@@ -145,7 +145,7 @@ function Edit() {
                   )}
                   {filePreview && typeof filePreview === 'string' && (
                     <img
-                      src={`http://localhost:8000/${filePreview}`}
+                      src={`https://backend-r4h5.onrender.com/${filePreview}`}
                       alt="current product image"
                       className="mt-2 w-32 h-32 object-cover"
                     />
