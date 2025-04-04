@@ -1,44 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from "react";
 import "./user.css";
 
 function User() {
   const [signupState, setSignupState] = useState({
     username: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const [loginState, setLoginState] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
+  const debounceTimeout = useRef(null);
+
   const handleSignupChange = (e) => {
-    setSignupState({
-      ...signupState,
-      [e.target.name]: e.target.value
-    });
+    setSignupState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
+
   const handleLoginChange = (e) => {
-    setLoginState({
-      ...loginState,
-      [e.target.name]: e.target.value
-    });
+    setLoginState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const submitSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://backend-r4h5.onrender.com/signup/user", {
+      const response = await fetch(`${import.meta.env.VITE_LINK}/signup/user`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(signupState)
+        body: JSON.stringify(signupState),
       });
 
       const data = await response.json();
-      console.log("Signup Response:", data);
 
       if (response.ok) {
         alert("Signup successful! Please log in.");
@@ -51,32 +53,35 @@ function User() {
     }
   };
 
-
-  const submitLogin = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("https://backend-r4h5.onrender.com/signup/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(loginState)
-      });
-
-      const data = await response.json();
-      if(data.success === true){
-        alert("Login successful!");
-      }
-
-      if (response.ok) {
-        alert("Login successful!");
-      } else {
-        alert(data.message || "Login failed.");
-      }
-    } catch (error) {
-      console.error("Error logging in:", error);
-      alert("An error occurred during login.");
+    
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
     }
+
+    debounceTimeout.current = setTimeout(async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_LINK}/signup/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginState),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Login successful!");
+        } else {
+          alert(data.message || "Login failed.");
+        }
+      } catch (error) {
+        console.error("Error logging in:", error);
+        alert("An error occurred during login.");
+      }
+    }, 500);
   };
 
   return (
@@ -91,31 +96,35 @@ function User() {
               {/* Login Form */}
               <div className="flip-card__front">
                 <div className="title">Log in</div>
-                <form className="flip-card__form" onSubmit={submitLogin}>
-                  <input 
-                    className="flip-card__input" 
-                    name="email" 
-                    placeholder="Email" 
-                    type="email"  
-                    value={loginState.email} 
-                    onChange={handleLoginChange} 
+                <form className="flip-card__form" onSubmit={handleLoginSubmit} method="post" autoComplete="off">
+                  <input
+                    className="flip-card__input"
+                    name="email"
+                    placeholder="Email"
+                    type="email"
+                    value={loginState.email}
+                    onChange={handleLoginChange}
+                    autoComplete="off"
                   />
-                  <input 
-                    className="flip-card__input" 
-                    name="password" 
-                    placeholder="Password" 
-                    type="password"  
-                    value={loginState.password} 
-                    onChange={handleLoginChange} 
+                  <input
+                    className="flip-card__input"
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                    value={loginState.password}
+                    onChange={handleLoginChange}
+                    autoComplete="new-password"
                   />
-                  <button className="flip-card__btn" type="submit">Let’s go!</button>
+                  <button className="flip-card__btn" type="submit">
+                    Let’s go!
+                  </button>
                 </form>
               </div>
 
               {/* Signup Form */}
               <div className="flip-card__back">
                 <div className="title">Sign up</div>
-                <form className="flip-card__form" onSubmit={submitSignup}>
+                <form className="flip-card__form" onSubmit={submitSignup} method="post" autoComplete="off">
                   <input
                     className="flip-card__input"
                     name="username"
@@ -123,6 +132,7 @@ function User() {
                     type="text"
                     value={signupState.username}
                     onChange={handleSignupChange}
+                    autoComplete="off"
                   />
                   <input
                     className="flip-card__input"
@@ -131,6 +141,7 @@ function User() {
                     type="email"
                     value={signupState.email}
                     onChange={handleSignupChange}
+                    autoComplete="off"
                   />
                   <input
                     className="flip-card__input"
@@ -139,8 +150,11 @@ function User() {
                     type="password"
                     value={signupState.password}
                     onChange={handleSignupChange}
+                    autoComplete="new-password"
                   />
-                  <button className="flip-card__btn" type="submit">Confirm!</button>
+                  <button className="flip-card__btn" type="submit">
+                    Confirm!
+                  </button>
                 </form>
               </div>
             </div>

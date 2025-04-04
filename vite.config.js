@@ -4,4 +4,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  define: {
+    'import.meta.env': process.env, // Ensure process.env is available
+  },
 })
